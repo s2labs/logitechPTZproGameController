@@ -9,8 +9,7 @@ class Command(Enum):
     "right_shift": " uvcdynctrl -d /dev/video0 -s \'Pan (Speed)\' -- 1; sleep 0.1;  uvcdynctrl -d /dev/video0 -s \'Pan (Speed)\' -- 0",
     "up": "uvcdynctrl -d /dev/video0 -s \'Tilt (Speed)\' -- 1; sleep 0.1;  uvcdynctrl -d /dev/video0 -s \'Tilt (Speed)\' -- 0",
     "down": "uvcdynctrl -d /dev/video0 -s \'Tilt (Speed)\' -- -1; sleep 0.1;  uvcdynctrl -d /dev/video0 -s \'Tilt (Speed)\' -- 0",
-    "zoom_in": "uvcdynctrl -s \"Zoom, Absolute\" 300",
-    "zoom_out": "uvcdynctrl -s \"Zoom, Absolute\" 100"
+    "zoom": "uvcdynctrl -s \"Zoom, Absolute\" {}"
   })
 
 

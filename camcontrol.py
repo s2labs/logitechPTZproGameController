@@ -17,15 +17,11 @@ def shift_down():
 
     check_output(Command.camera_commands.cmd["down"], shell=True)
 
-def zoom_in():
+def zoom(val):
 
-    check_output(Command.camera_commands.cmd["zoom_in"], shell=True)
+    check_output(Command.camera_commands.cmd["zoom"].format(val), shell=True)
 
-def zoom_out():
-
-    check_output(Command.camera_commands.cmd["zoom_out"], shell=True)
-
-def execute(param):
+def execute(param, zoom_val):
 
     if param == 'left':
         shift_left()
@@ -39,11 +35,8 @@ def execute(param):
     elif param == 'down':
         shift_down()
         return True
-    elif param == 'zoomin':
-        zoom_in()
-        return True
-    elif param == 'zoomout':
-        zoom_out()
+    elif param == 'zoom':
+        zoom(zoom_val)
         return True
     else:
         return False

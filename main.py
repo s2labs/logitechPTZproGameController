@@ -7,6 +7,7 @@ device = evdev.InputDevice('/dev/input/event3')
 
 def gamepad_control():
 
+    zoom_val = 100
     while True:
         for ev in device.read_loop():
             if ev.type == evdev.ecodes.EV_KEY:
@@ -14,13 +15,13 @@ def gamepad_control():
                 res = str(res)
                 res = res.split(",")[1].split("(")[0].strip()
                 if res == "305":
-                    ops = execute("right")
+                    ops = execute("right", zoom_val)
                 elif res == "307":
-                    ops = execute("left")
+                    ops = execute("left", zoom_val)
                 elif res == "308":
-                    ops = execute("up")
+                    ops = execute("up", zoom_val)
                 elif res == "304":
-                    ops = execute("down")
+                    ops = execute("down", zoom_val)
                 else:
                     ops = True
                     continue
@@ -40,23 +41,46 @@ def gamepad_control():
                         if scval > 0:
                             print(scval)
                             for i in range(0,scval):
-                                ops = execute("right")
+                                ops = execute("right", zoom_val)
                         else:
                             scval = abs(scval)
                             print(scval)
                             for i in range(0,scval):
-                                ops = execute("left")
-                    if farg == 1:
+                                ops = execute("left", zoom_val)
+                    elif farg == 1:
                         scval = scale.xscale(sarg)
                         if scval > 0:
                             print(scval)
                             for i in range(0, scval):
-                                ops = execute("down")
+                                ops = execute("down", zoom_val)
                         else:
                             scval = abs(scval)
                             print(scval)
                             for i in range(0, scval):
-                                ops = execute("up")
+                                ops = execute("up", zoom_val)
+                    elif farg == 5:
+                        if zoom_val <= 300:
+                            zoom_val += 10
+                        ops = execute("zoom", zoom_val)
+                    elif farg == 2:
+                        if zoom_val >= 100:
+                            zoom_val -= 10
+                        ops = execute("zoom", zoom_val)
+                    elif farg == 16:
+                        if sarg == 1:
+                            if zoom_val <= 300:
+                                zoom_val += 10
+                            ops = execute("zoom", zoom_val)
+                        elif sarg == -1:
+                            if zoom_val >= 100:
+                                zoom_val -= 10
+                            ops = execute("zoom", zoom_val)
+                        else:
+                            pass
+                    else:
+                        ops = True
+                        continue
+
 
 
 if __name__ == "__main__":
