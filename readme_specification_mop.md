@@ -20,7 +20,8 @@ Create for each setting three variables:
 - VAR_CurrentState: current value element of {AUTO; a value in its range} (you read those from uvcctrl -vc)
 - VAR_Stepping (you read those from uvcctrl -vc)
 - VAR_MaxValue (you read those from uvcctrl -vc)
-- VAR_MonValue (you read those from uvcctrl -vc)
+- VAR_MinValue (you read those from uvcctrl -vc)
+- VAR_DEFAULT (read from PRESET_VAR_CameraID_DEFAULT or take AUTO/ CameraDefault here)
 - boolean VAR_IamIncreasing; determines if you want to count up or down
 
 In addition the static variables:
@@ -34,7 +35,8 @@ In addition the static variables:
 
 And:
 
-- Array of arrays for the presets.
+Store a map for ControllerButton -> Functionality so that we can reconfigure.
+E.g. ButtonName -> DoReset.
 
 ## 2. Determining Current Values
 The program has to know the cameras current values for all settings when it does changes.
@@ -104,3 +106,5 @@ Reflect all values from this Preset to the camera (and the model).
 Use the left five binary buttons  for controller configs and the right five for camera positions.
 
 Store All Presets ON DISK to keep them persistent over script restarts (Filename PRESET_{CTRL_VAR_ControllerID,SCNE_VAR_CameraID}).
+
+Also allow pressing the RESET button longer for storing PRESET_VAR_CameraID_DEFAULT. 
