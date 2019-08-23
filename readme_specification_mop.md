@@ -6,6 +6,19 @@ SET: uvcdynctrl -d VAR_CameraID -s 'VAR_ParamId' VALUE.
 
 GET: uvcdynctrl -d VAR_CameraID -g 'VAR_ParamId'
 
+## How to do it elegant
+The most elegant, extensible and actually also simplest way to do it is:
+
+- run the uvcdynctrl -cv
+- parse it automatically and create all dynamic variables from it
+- you then only have to handle the special commands via excludes and extra handlers
+
+If you want to learn something regarding elegant programminng, do this.
+I can detail it to you if unclear.
+
+Doing it non-elegant also works.
+The most relevant to me is having the result in time (latest next Wed eob).
+
 ## 0. Before you code
 Measure the behavior for the motor because it automatically switches to fast after VAR_StepsBeforeMotorSpeedsUp time.
 The other Things seem to work linearly at a certain speed.
