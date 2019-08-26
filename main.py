@@ -67,20 +67,20 @@ def gamepad_control(device, cam_name):
                     should_move = abs(sarg) > buttonSensitivityThreshold 
                     is_increasing = (sarg>=0)
                     command2move = ["Pan (Speed)", "Tilt (Speed)"]
-                    if is_increasing:
-                        selectedOperation = 1
-                    else:
-                        selectedOperation = -1
+
+                    selectedOperation = 0
+                    if should_move:
+                        selectedOperation 1 if is_increasing else -1
+                    # invert for TILT
                     if (farg-3 ==1):
                         selectedOperation = -1*selectedOperation
-                    if not should_move:
-                        selectedOperation = 0
-                    value = str(selectedOperation)
-                    if selectedOperation == -1:
-                        value = "-- -1"
+                    # sanetize -1 for uvcdynctrl:
+                    value = "-- -1" if selectedOperation < 0 else str(selectedOperation)
+
                     if (movingDirection[farg-3] != abs(selectedOperation)):
                         movingDirection[farg-3] = abs(selectedOperation)
                         uvcSET(command2move[farg-3],value)
+
                 # farg= 1 = ZOOM; 0 = exposure
                 # farg = 3 = value selected above - 5= value selected above +
                 # for these buttons set the value to the maximum in the direction the user wants to go.
