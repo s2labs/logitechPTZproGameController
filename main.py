@@ -20,6 +20,7 @@ def gamepad_control(device, cam_name):
 
     for ev in device.read_loop():
         if ev.type == evdev.ecodes.EV_KEY:
+            print(evdev.events.KeyEvent)
         # TODO: also check if it is the keyDOWN event otherwise it fires on down and up!
             res = evdev.categorize(ev)
             res = str(res)
