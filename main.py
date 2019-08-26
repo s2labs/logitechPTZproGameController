@@ -7,8 +7,8 @@ import configparser
 buttonSensitivityThreshold = 18000
 
 def uvcSET(command, value):
-    check_output("uvcdynctrl -d {} -s \'{}\' {}".format(cam_name, command, value), shell=True)
-    print("uvcdynctrl -d {} -s \'{}\' {}".format(cam_name, command, value))
+    check_output("uvcdynctrl -d {} -s \'{}\' -- {}".format(cam_name, command, value), shell=True)
+    print("uvcdynctrl -d {} -s \'{}\' -- {}".format(cam_name, command, value))
 def uvcGET(command, param):
     check_output("uvcdynctrl -d {} -g \'{}\'".format(cam_name, command), shell=True)
     print("uvcdynctrl -d {} -g \'{}\'".format(cam_name, command))
@@ -74,12 +74,10 @@ def gamepad_control(device, cam_name):
                     # invert for TILT
                     if (farg-3 ==1):
                         selectedOperation = -1*selectedOperation
-                    # sanetize -1 for uvcdynctrl:
-                    value = "-- -1" if selectedOperation < 0 else str(selectedOperation)
 
                     if (movingDirection[farg-3] != abs(selectedOperation)):
                         movingDirection[farg-3] = abs(selectedOperation)
-                        uvcSET(command2move[farg-3],value)
+                        uvcSET(command2move[farg-3],selectedOperation)
 
                 # farg= 1 = ZOOM; 0 = exposure
                 # farg = 3 = value selected above - 5= value selected above +
