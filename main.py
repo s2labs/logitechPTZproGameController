@@ -1,8 +1,13 @@
 import evdev
 from camcontrol import execute
 import scale
+from subprocess import check_output
 import configparser
 
+def uvcSET(command, value):
+    check_output("uvcdynctrl -d {} -s \'{}\' {}".format(cam_name, command, value), shell=True)
+def uvcGET(command, param):
+    check_output("uvcdynctrl -d {} -g \'{}\'".format(cam_name, command), shell=True)
 
 def gamepad_control(device, cam_name):
 
@@ -41,25 +46,25 @@ def gamepad_control(device, cam_name):
                 # farg = 3 : right controller and side movement
 
                 if farg in  [3, 4]:
-                    should_move = (sarg < -10000) or (sarg > 10000)
+                    should_move = abs(sarg) > 18000
                     is_increasing = (sarg>=0)
-                    command2move = [["right", "left"], ["up", "down"]]
-                    command2stop = ["pan_stop", "tilt_stop"]
-                    print(movingDirection)
+                    command2move = ["Pan (Speed)", "Tilt (Speed)"]
                     if is_increasing:
-                        selectedOperation = 0
-                    else:
                         selectedOperation = 1
-
-                    if should_move:
-                        if (movingDirection[farg-3] == 0):
-                            ops = execute(command2move[farg-3][selectedOperation], cam_name)
-                            movingDirection[farg-3] = 1
                     else:
-                        if (movingDirection[farg - 3] == 1):
-                            ops = execute(command2stop[farg - 3], cam_name)
-                            movingDirection[farg - 3] = 0
-
+                        selectedOperation = -1
+                    if (farg-3 ==1):
+                        selectedOperation = -1*selectedOperation
+                    if not should_move:
+                        selectedOperation = 0
+                    value = str(selectedOperation)
+                    if selectedOperation == -1:
+                        value = "-- -1"
+                    if (movingDirection[farg-3] != abs(selectedOperation)):
+                        movingDirection[farg-3] = abs(selectedOperation)
+                        print(movingDirection)
+                        uvcSET(command2move[farg-3],value)
+                        print("uvcdynctrl -d {} -s \'{}\' {}".format(cam_name,command2move[farg-3],value))
 
                 # if should_move:
                 #     if is_increasing:
