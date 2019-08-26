@@ -24,6 +24,8 @@ def gamepad_control(device, cam_name):
             # res = evdev.categorize(ev)
             # res = str(res)
             # res = res.split(",")[1].split("(")[0].strip()
+            print(repr(ev)[3])
+            print(repr(ev)[3])
 
             ### Movement (Pan/ Tilt)
             # 2=right
