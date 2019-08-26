@@ -70,7 +70,7 @@ def gamepad_control(device, cam_name):
 
                     selectedOperation = 0
                     if should_move:
-                        selectedOperation 1 if is_increasing else -1
+                        selectedOperation = 1 if is_increasing else -1
                     # invert for TILT
                     if (farg-3 ==1):
                         selectedOperation = -1*selectedOperation
