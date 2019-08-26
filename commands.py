@@ -5,10 +5,10 @@ import hashlib
 
 class Command(Enum):
   camera_commands = ({
-    "left_shift": "uvcdynctrl -d /dev/video0 -s \'Pan (Speed)\' -- -1; sleep 0.1;  uvcdynctrl -d /dev/video0 -s \'Pan (Speed)\' -- 0",
-    "right_shift": " uvcdynctrl -d /dev/video0 -s \'Pan (Speed)\' -- 1; sleep 0.1;  uvcdynctrl -d /dev/video0 -s \'Pan (Speed)\' -- 0",
-    "up": "uvcdynctrl -d /dev/video0 -s \'Tilt (Speed)\' -- 1; sleep 0.1;  uvcdynctrl -d /dev/video0 -s \'Tilt (Speed)\' -- 0",
-    "down": "uvcdynctrl -d /dev/video0 -s \'Tilt (Speed)\' -- -1; sleep 0.1;  uvcdynctrl -d /dev/video0 -s \'Tilt (Speed)\' -- 0",
+    "left_shift": "uvcdynctrl -d {} -s \'Pan (Speed)\' -- -1; sleep 0.1;  uvcdynctrl -d {} -s \'Pan (Speed)\' -- 0",
+    "right_shift": " uvcdynctrl -d {} -s \'Pan (Speed)\' -- 1; sleep 0.1;  uvcdynctrl -d {} -s \'Pan (Speed)\' -- 0",
+    "up": "uvcdynctrl -d {} -s \'Tilt (Speed)\' -- 1; sleep 0.1;  uvcdynctrl -d {} -s \'Tilt (Speed)\' -- 0",
+    "down": "uvcdynctrl -d {} -s \'Tilt (Speed)\' -- -1; sleep 0.1;  uvcdynctrl -d {} -s \'Tilt (Speed)\' -- 0",
     "zoom": "uvcdynctrl -s \"Zoom, Absolute\" {}"
   })
 

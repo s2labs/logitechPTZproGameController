@@ -1,11 +1,10 @@
 import evdev
 from camcontrol import execute
 import scale
+import configparser
 
-device = evdev.InputDevice('/dev/input/event3')
 
-
-def gamepad_control():
+def gamepad_control(device, cam_name):
 
     zoom_val = 100
     while True:
@@ -15,13 +14,13 @@ def gamepad_control():
                 res = str(res)
                 res = res.split(",")[1].split("(")[0].strip()
                 if res == "305":
-                    ops = execute("right", zoom_val)
+                    ops = execute("right", zoom_val, cam_name)
                 elif res == "307":
-                    ops = execute("left", zoom_val)
+                    ops = execute("left", zoom_val, cam_name)
                 elif res == "308":
-                    ops = execute("up", zoom_val)
+                    ops = execute("up", zoom_val, cam_name)
                 elif res == "304":
-                    ops = execute("down", zoom_val)
+                    ops = execute("down", zoom_val, cam_name)
                 else:
                     ops = True
                     continue
@@ -41,40 +40,40 @@ def gamepad_control():
                         if scval > 0:
                             print(scval)
                             for i in range(0,scval):
-                                ops = execute("right", zoom_val)
+                                ops = execute("right", zoom_val, cam_name)
                         else:
                             scval = abs(scval)
                             print(scval)
                             for i in range(0,scval):
-                                ops = execute("left", zoom_val)
+                                ops = execute("left", zoom_val, cam_name)
                     elif farg == 1:
                         scval = scale.xscale(sarg)
                         if scval > 0:
                             print(scval)
                             for i in range(0, scval):
-                                ops = execute("down", zoom_val)
+                                ops = execute("down", zoom_val, cam_name)
                         else:
                             scval = abs(scval)
                             print(scval)
                             for i in range(0, scval):
-                                ops = execute("up", zoom_val)
+                                ops = execute("up", zoom_val, cam_name)
                     elif farg == 5:
                         if zoom_val <= 300:
                             zoom_val += 10
-                        ops = execute("zoom", zoom_val)
+                        ops = execute("zoom", zoom_val, cam_name)
                     elif farg == 2:
                         if zoom_val >= 100:
                             zoom_val -= 10
-                        ops = execute("zoom", zoom_val)
+                        ops = execute("zoom", zoom_val, cam_name)
                     elif farg == 16:
                         if sarg == 1:
                             if zoom_val <= 300:
                                 zoom_val += 10
-                            ops = execute("zoom", zoom_val)
+                            ops = execute("zoom", zoom_val, cam_name)
                         elif sarg == -1:
                             if zoom_val >= 100:
                                 zoom_val -= 10
-                            ops = execute("zoom", zoom_val)
+                            ops = execute("zoom", zoom_val, cam_name)
                         else:
                             pass
                     else:
@@ -85,5 +84,10 @@ def gamepad_control():
 
 if __name__ == "__main__":
 
-    gamepad_control()
+    config = configparser.ConfigParser()
+    config.read('config.ini')
+    device_name = config['DEVICE']['Name']
+    device = evdev.InputDevice(device_name)
+    cam_name = config['VIDEO']['Name']
+    gamepad_control(device, cam_name)
 
