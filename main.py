@@ -83,6 +83,8 @@ def gamepad_control(device, cam_name):
                         uvcSET(command2move[farg-3],value)
                 # farg= 1 = ZOOM; 0 = exposure
                 # farg = 3 = value selected above - 5= value selected above +
+                # for these buttons set the value to the maximum in the direction the user wants to go.
+                # if the release event / stop comes: GET the current value (if this gives the actual value and not the target) and SET this value +/- 11
 
 if __name__ == "__main__":
 
