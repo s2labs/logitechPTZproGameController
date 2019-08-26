@@ -22,27 +22,27 @@ def gamepad_control(device, cam_name):
         print(evdev.ecodes.EV_KEY)
         if ev.type == evdev.ecodes.EV_KEY:
         # TODO: also check if it is the keyDOWN event otherwise it fires on down and up!
-            myKeyEvent = evdev.events.KeyEvent(ev)
-            print(myKeyEvent.keystate)
-            print(myKeyEvent.scancode)
-            print(myKeyEvent.key_down)
-            print(myKeyEvent.keycode)
-            print(myKeyEvent.event)
+            k = evdev.events.KeyEvent(ev)
+            print(k.keystate)
+            print(k.scancode)
+            print(k.key_down)
+            print(k.keycode)
+            print(k.event)
             ### Movement (Pan/ Tilt)
             # 2=right
-            if myKeyEvent.scancode == "305" and myKeyEvent.keystate == myKeyEvent.key_down:
+            if k.scancode == "305" and k.keystate == k.key_down:
                 uvcSET("Pan (relative)", "-80")
             # 7=left
-            if myKeyEvent.scancode == "307" and myKeyEvent.keystate == myKeyEvent.key_down:
+            if k.scancode == "307" and k.keystate == k.key_down:
                 uvcSET("Pan (relative)", "80")
             # 1=UP
-            elif myKeyEvent.scancode == "308" and myKeyEvent.keystate == myKeyEvent.key_down:
+            elif k.scancode == "308" and k.keystate == k.key_down:
                 uvcSET("Tilt (relative)", "80") 
             # 3=down
-            elif myKeyEvent.scancode == "304" and myKeyEvent.keystate == myKeyEvent.key_down:
+            elif k.scancode == "304" and k.keystate == k.key_down:
                 uvcSET("Tilt (relative)", "-80")
             # Right Cross pressed:
-            elif myKeyEvent.scancode == "318" and myKeyEvent.keystate == myKeyEvent.key_down:
+            elif k.scancode == "318" and k.keystate == k.key_down:
                 uvcSET("Tilt Reset", "1")
                 uvcSET("Pan Reset", "1")
             ### Other functions
@@ -54,10 +54,10 @@ def gamepad_control(device, cam_name):
             #
             # left cross: up/ down = Zoom one step;
             # 17=up (-1)
-            elif myKeyEvent.scancode == "17" and myKeyEvent.event.value == "-1":
+            elif k.scancode == "17" and k.event.value == "-1":
                 uvcSET("Zoom, Absolute", uvcGET("Zoom, Absolute")+10)
             # 17=down (1)
-            elif myKeyEvent.scancode == "17" and myKeyEvent.event.value.value == "1":
+            elif k.scancode == "17" and k.event.value.value == "1":
                 uvcSET("Zoom, Absolute", uvcGET("Zoom, Absolute")-10)
             # left cross: left/right = exposure one step
             else:
