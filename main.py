@@ -27,16 +27,16 @@ def gamepad_control(device, cam_name):
             ### Movement (Pan/ Tilt)
             # C=right
             if res == "305":
-                uvcSET("Pan (Relative)", "1")
+                uvcSET("Pan (Relative)", "80")
             # A=left
             elif res == "307":
-                uvcSET("Pan (Relative)", "-- -1")
+                uvcSET("Pan (Relative)", "-- -80")
             # B=UP
             elif res == "308":
-                uvcSET("Tilt (Relative)", "1") 
+                uvcSET("Tilt (Relative)", "80") 
             # D=down
             elif res == "304":
-                uvcSET("Tilt (Relative)", "-- -1")
+                uvcSET("Tilt (Relative)", "-- -80")
 
             ### Other functions
             # select: toggle other commands (zoom, exposure, ...) for usage withthe back buttons
