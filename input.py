@@ -1,6 +1,5 @@
 import evdev
 from time import sleep
-from commands import run_and_get_output
 import asyncio
 
 dev = evdev.InputDevice('/dev/input/event3')
