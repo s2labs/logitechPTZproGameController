@@ -28,7 +28,6 @@ def gamepad_control(device, cam_name):
             print(myKeyEvent.key_down)
             print(myKeyEvent.keycode)
             print(myKeyEvent.event)
-            
             ### Movement (Pan/ Tilt)
             # 2=right
             if myKeyEvent.scancode == "305" and myKeyEvent.keystate == myKeyEvent.key_down:
@@ -46,14 +45,13 @@ def gamepad_control(device, cam_name):
             elif myKeyEvent.scancode == "318" and myKeyEvent.keystate == myKeyEvent.key_down:
                 uvcSET("Tilt Reset", "1")
                 uvcSET("Pan Reset", "1")
-
             ### Other functions
             # select: toggle other commands (zoom, exposure, ...) for usage withthe back buttons
             # start: select between auto and manual
-
+            #
             # back right button = +1 for the selected property
             # back left button = -1 for the selected property
-
+            #
             # left cross: up/ down = Zoom one step;
             # 17=up (-1)
             elif myKeyEvent.scancode == "17" and myKeyEvent.event.value == "-1":
