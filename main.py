@@ -3,6 +3,9 @@ import scale
 from subprocess import check_output
 import configparser
 
+# When should the "analog" buttons react?
+buttonSensitivityThreshold = 18000
+
 def uvcSET(command, value):
     check_output("uvcdynctrl -d {} -s \'{}\' {}".format(cam_name, command, value), shell=True)
     print("uvcdynctrl -d {} -s \'{}\' {}".format(cam_name, command, value))
@@ -61,7 +64,7 @@ def gamepad_control(device, cam_name):
                 # farg = 3 : right controller and side movement
                 # farg = 4 : right controller and up/down movement
                 if farg in  [3, 4]:
-                    should_move = abs(sarg) > 18000
+                    should_move = abs(sarg) > buttonSensitivityThreshold 
                     is_increasing = (sarg>=0)
                     command2move = ["Pan (Speed)", "Tilt (Speed)"]
                     if is_increasing:
