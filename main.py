@@ -21,11 +21,11 @@ def gamepad_control(device, cam_name):
     for ev in device.read_loop():
         if ev.type == evdev.ecodes.EV_KEY:
         # TODO: also check if it is the keyDOWN event otherwise it fires on down and up!
-            # res = evdev.categorize(ev)
+            res = evdev.categorize(ev)
             # res = str(res)
             # res = res.split(",")[1].split("(")[0].strip()
-            print(repr(ev)[3])
-            print(repr(ev)[3])
+            print(res[3])
+            print(res[4])
 
             ### Movement (Pan/ Tilt)
             # 2=right
