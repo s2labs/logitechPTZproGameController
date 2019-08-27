@@ -1,17 +1,33 @@
 import evdev
 import scale
-from subprocess import check_output
+from subprocess import check_output, Popen
 import configparser
+import shlex
+from time import sleep
 
 # When should the "analog" buttons react?
 buttonSensitivityThreshold = 18000
 
-def uvcSET(command, value):
+def uvcSET(cam_name, command, value):
     check_output("uvcdynctrl -d {} -s \'{}\' -- {}".format(cam_name, command, value), shell=True)
     print("uvcdynctrl -d {} -s \'{}\' -- {}".format(cam_name, command, value))
-def uvcGET(command, param):
+
+def uvcGET(cam_name, command):
     print("uvcdynctrl -d {} -g \'{}\'".format(cam_name, command))
-    return check_output("uvcdynctrl -d {} -g \'{}\'".format(cam_name, command), shell=True)
+    res = check_output("uvcdynctrl -d {} -g \'{}\'".format(cam_name, command), shell=True).decode("utf-8")
+    val = int(res.split(")")[0])
+    return val
+
+def executeInLoop(periodicity, command):
+
+    while True:
+        proc = Popen(shlex.split(command), bufsize=1, stdin=None, stdout=None, stderr=None, shell=True)
+        sleep(periodicity)
+        return proc
+
+def stopExecuteInLoop(processID):
+
+    processID.kill()
 
 def gamepad_control(device, cam_name):
 
@@ -54,12 +70,12 @@ def gamepad_control(device, cam_name):
             #
             # left cross: up/ down = Zoom one step;
             # 17=up (-1)
-            elif k.scancode == "17" and k.event.value == "-1":
-                uvcSET("Zoom, Absolute", uvcGET("Zoom, Absolute")+10)
-            # 17=down (1)
-            elif k.scancode == "17" and k.event.value.value == "1":
-                uvcSET("Zoom, Absolute", uvcGET("Zoom, Absolute")-10)
-            # left cross: left/right = exposure one step
+            # elif k.scancode == "17" and k.event.value == "-1":
+            #     uvcSET(cam_name, "Zoom, Absolute", uvcGET(cam_name, "Zoom, Absolute")+10)
+            # # 17=down (1)
+            # elif k.scancode == "17" and k.event.value.value == "1":
+            #     uvcSET(cam_name, "Zoom, Absolute", uvcGET(cam_name, "Zoom, Absolute")-10)
+            # # left cross: left/right = exposure one step
             else:
                 ops = True
                 continue
@@ -90,21 +106,45 @@ def gamepad_control(device, cam_name):
 
                     if (movingDirection[farg-3] != abs(selectedOperation)):
                         movingDirection[farg-3] = abs(selectedOperation)
-                        uvcSET(command2move[farg-3],selectedOperation)
+                        uvcSET(cam_name, command2move[farg-3], selectedOperation)
+                # farg = 0: left controller and side movement
+                # farg = 1: left controller and up/down movement
+                elif farg == 1:
+                    should_zoom = abs(sarg) > buttonSensitivityThreshold
+                    if should_zoom:
+                        zoom_level = scale.zoom_scale(sarg, uvcGET(cam_name, "Zoom, Absolute"))
+                        uvcSET(cam_name, "Zoom, Absolute", zoom_level)
+                        should_zoom = False
+                elif farg == 17:
+                    zoom_level = uvcGET(cam_name, "Zoom, Absolute")
+                    if sarg == 1:
+                        zoom_level = zoom_level - 30
+                    if sarg == -1:
+                        zoom_level = zoom_level + 30
+                    if zoom_level > 1000:
+                        zoom_level = 1000
+                    if zoom_level < 100:
+                        zoom_level = 100
+                    uvcSET(cam_name, "Zoom, Absolute", zoom_level)
+                else:
+                    ops = True
+                    continue
 
-                # farg= 1 = ZOOM; 0 = exposure
-                # farg = 3 = value selected above - 5= value selected above +
-                # for these buttons set the value to the maximum in the direction the user wants to go.
-                # if the release event / stop comes: GET the current value (if this gives the actual value and not the target) and SET this value +/- 11
 
 if __name__ == "__main__":
 
+    command = "echo 'Anubhab'"
+    p = executeInLoop(0.2, command)
+    sleep(15)
+    stopExecuteInLoop(p)
+
 # Change this to work with the command line without config file
 # add a --help -h !
-    config = configparser.ConfigParser()
-    config.read('config.ini')
-    device_name = config['DEVICE']['Name']
-    device = evdev.InputDevice(device_name)
-    cam_name = config['VIDEO']['Name']
-    gamepad_control(device, cam_name)
+#   config = configparser.ConfigParser()
+#   config.read('config.ini')
+#   device_name = config['DEVICE']['Name']
+#   device = evdev.InputDevice(device_name)
+#   cam_name = config['VIDEO']['Name']
+#   gamepad_control(device, cam_name)
+
 
