@@ -2,6 +2,7 @@ import evdev
 import scale
 from subprocess import check_output, Popen
 import configparser
+import argparse
 import shlex
 from time import sleep
 
@@ -133,18 +134,25 @@ def gamepad_control(device, cam_name):
 
 if __name__ == "__main__":
 
-    command = "echo 'Anubhab'"
-    p = executeInLoop(0.2, command)
-    sleep(15)
-    stopExecuteInLoop(p)
-
-# Change this to work with the command line without config file
-# add a --help -h !
-#   config = configparser.ConfigParser()
-#   config.read('config.ini')
-#   device_name = config['DEVICE']['Name']
-#   device = evdev.InputDevice(device_name)
-#   cam_name = config['VIDEO']['Name']
-#   gamepad_control(device, cam_name)
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--video")
+    parser.add_argument("--gamepad")
+    args = parser.parse_args()
+    #print(args.video)
+    #print(args.gamepad)
+    config = configparser.ConfigParser()
+    config.read('config.ini')
+    if args.gamepad == None:
+        device_name = config['DEVICE']['Name']
+    else:
+        device_name = str(args.gamepad)
+    device = evdev.InputDevice(device_name)
+    if args.video == None:
+        cam_name = config['VIDEO']['Name']
+    else:
+        cam_name = str(args.video)
+    print(cam_name)
+    print(device_name)
+    gamepad_control(device, cam_name)
 
 
